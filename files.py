@@ -24,8 +24,8 @@ def parte(string, parte, separador):
 
 def pdf_to_images(path, file):
 	abs_path = os.path.join(path, file)
-	poppler_path = os.path.abspath(os.path.join('poppler-0.68.0', 'bin')
-	images = convert_from_path(abs_path, poppler_path = poppler_path)
+	poppler_abs_path = os.path.abspath(os.path.join('poppler-0.68.0', 'bin'))
+	images = convert_from_path(abs_path, poppler_path = poppler_abs_path)
 	name = parteAte(file, -1, '.')
 	for i, image in enumerate(images):
 		i+=1
