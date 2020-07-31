@@ -1,6 +1,7 @@
 from pdf2image import convert_from_path
 from docx import Document
 from docx.shared import Inches
+from services import parte, parteAte
 import os
 import comtypes.client
 
@@ -9,18 +10,6 @@ from pdf2image.exceptions import (
  PDFPageCountError,
  PDFSyntaxError
 )
-
-def parteAte(string, limite,separador):
-	partes = string.split(separador)
-	partes = partes[0:limite]
-	retorno = ''
-	for p in partes:
-		retorno += p + separador
-	return retorno
-
-def parte(string, parte, separador):
-	partes = string.split(separador)
-	return partes[parte]
 
 def pdf_to_images(path, file):
 	abs_path = os.path.join(path, file)
@@ -46,13 +35,16 @@ def arquivosParaImagem(path_to_files):
 
 		print('==================')
 
-def gerar_documento(path_to_files, file_name):
-	level_root = path.count("\\")
-	document = Document('modelo.docx')
+def gerar_documento(path_to_files, file_name, model_file = ''):
+	level_root = path_to_files.count("\\")
+
+	document = ''
+	if model_file:
+		document = Document(model_file)
+	else:
+		document = Document()
 
 	for root, dir_names, file_names in os.walk(path_to_files):
-		# if "x_Descartar" in root:
-		# 	continue
 		level_path = root.count("\\")
 		level = level_path - level_root
 		level +=1
@@ -71,7 +63,8 @@ def gerar_documento(path_to_files, file_name):
 				 abs_path = os.path.join(root, file)
 				 document.add_picture(abs_path,width=Inches(7))
 	file_name = file_name + '.docx'
-	document.save(file_name)
+	abs_file = os.path.join(path_to_files, file_name)
+	document.save(abs_file)
 
 
 def word_to_pdf(path, file_name):
@@ -89,7 +82,6 @@ def word_to_pdf(path, file_name):
 	word.Quit()
 
 
-# pdf_to_images("C:\\Users\\Lucas Salvador\\Desktop\\_CERTIDOES-17-jun-2020\\I-DO-IMOVEL\\1.MATRICULAS-FAZENDA", 'MAtricula_21.645-PAU-DALHO(19-MAIO-2020).pdf')
 #percorreDiretorios()
 # arquivosParaImagem()
 
